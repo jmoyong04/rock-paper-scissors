@@ -1,10 +1,11 @@
 /*
 Rock paper scissors game:
-Create function to play a round
-    Get choice from Computer
-    Get choice from user
-    Display who won
-    Display current score
+    Create function to play a round
+        Get choice from Computer
+        Get choice from user
+        Display who won
+        Display current score
+    Create a function to play entire game
 */
 
 
