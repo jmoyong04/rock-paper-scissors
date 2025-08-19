@@ -7,6 +7,13 @@ Rock paper scissors game:
         Display current score
     Create a function to play entire game
 */
+let choices = document.querySelector("#container")
+let btnRock = document.querySelector("#rock")
+let btnPaper = document.querySelector("#paper")
+let btnScissors = document.querySelector("#scissors")
+let displayResults = document.querySelector("#display-results")
+let humanScore = 0
+let computerScore = 0 
 
 
 function getComputerChoice(){
@@ -18,54 +25,63 @@ switch(choice){
         return "paper"
     case 3:
         return "scissors"
+    }   
 }
-}
-
-function getHumanChoice(){
-    let choice = prompt("Enter rock, paper, or scissors")
-    choice = choice.toLowerCase()
-    if (!(choice == "rock" || choice == "paper" || choice == "scissors")){
-        alert("Invalid choice, must choose rock, paper, or scissors")
-        getHumanChoice();
-    }
-    return choice
-}
-
-
-
 function playGame(){
-    function playRound(humanChoice = getHumanChoice(), computerChoice = getComputerChoice()){
+    function handleClick(e){
+        let target = e.target
+        switch(target.id) {
+            case 'rock':
+                playRound('rock')
+                break;
+            case 'paper':
+                playRound('paper')
+                break;
+            case 'scissors':
+                playRound('scissors')
+                break;
+        }
+    }
+    choices.addEventListener('click', handleClick)
+    function checkScore(humanScore, computerScore){
+        if (humanScore == 5 || computerScore == 5){
+            choices.removeEventListener('click', handleClick);
+            const message = document.createElement("p")
+            if (computerScore == 5){
+                message.textContent = `Game over :( you lost ${humanScore} to ${computerScore}`
+                displayResults.appendChild(message)
+            }
+            else {
+                message.textContent = `Good Job! You won ${humanScore} to ${computerScore}`
+                displayResults.appendChild(message)
+            }
+        }
+    }
+    function playRound(humanChoice, computerChoice = getComputerChoice()){
         if ((humanChoice == "rock" && computerChoice == "scissors") || (humanChoice == "paper" && computerChoice == "rock") || (humanChoice == "scissors" && computerChoice == "paper")){
             humanScore++
-            alert(`You win this round! ${humanChoice} beats ${computerChoice}.`)
-    
+            const message = document.createElement("p")
+            message.textContent = (`You win this round! ${humanChoice} beats ${computerChoice}.
+                                        You: ${humanScore} Computer: ${computerScore}
+                `)
+            displayResults.appendChild(message)
+            checkScore(humanScore, computerScore)
         }
         else if ((computerChoice == "rock" && humanChoice == "scissors") || (computerChoice == "paper" && humanChoice == "rock") || (computerChoice == "scissors" && humanChoice == "paper")){
             computerScore++
-            alert(`Oh no! You lost the round. ${computerChoice} beats ${humanChoice}.`)
+            const message = document.createElement("p")
+            message.textContent = `Oh no! You lost the round. ${computerChoice} beats ${humanChoice}.
+                                        You: ${humanScore} Computer: ${computerScore}`
+            displayResults.appendChild(message)
+            checkScore(humanScore, computerScore)
     
         }
-        else{
-            alert(`It's a tie! Play again`)
-            playRound()
+        else {
+            const message = document.createElement("p")
+            message.textContent = "Its a tie! Play again"
+            displayResults.appendChild(message)
         }
     }
-
-    let humanScore = 0
-    let computerScore = 0
-    playRound()
-    playRound()
-    playRound()
-    playRound()
-    playRound()
-    if (humanScore > computerScore){
-        alert(`Good job! You won ${humanScore} to ${computerScore}!`)
-    }
-    else{
-        alert(`Better luck next time :( you lost ${computerScore} to ${humanScore}.`)
-    }
-
-
 }
 
 playGame();
